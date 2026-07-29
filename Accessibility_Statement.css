@@ -1,0 +1,285 @@
+*{
+    margin: 0;
+    padding: 0;
+    
+}
+html,body{
+    scroll-behavior: smooth;
+}
+body{
+    background:linear-gradient(rgb(212, 255, 212),white,rgb(212, 255, 212));
+    background-attachment: fixed;
+    color: rgb(47, 100, 47);
+    text-align: justify;
+
+}
+.navbar{
+    display: flex;
+    background-color: rgb(212, 255, 212);
+    box-shadow: 0 2px 12px rgba(0,0,0,0.25);
+}
+nav{
+    flex: 1;
+    text-align: right;
+    height: 50px;
+    
+    /* height: 50px;
+    width: 100%;
+    
+    display: flex; */
+    /* padding: 5px 0px 0px 20px; */
+    /* position: fixed; */
+    /* border: 2px solid red; */
+}
+nav ul{
+    width: 100%;
+    height: 100%;
+    background-color: rgb(212, 255, 212);
+    position: absolute;
+    top: 50px;
+    right: 0;
+    z-index: 2;
+    border: none;
+    /* border: 2px solid red; */
+    text-align: center;
+    font-size: 40px;
+    /* display: none; */
+}
+nav ul li{
+    list-style: none;
+    display: block;
+    margin: 20px 0px 20px 0px;
+    /* border: 2px solid blue; */
+}
+nav ul li a{
+    text-decoration: none;
+    font-size: 30px;
+}
+#menu_list{
+    overflow: hidden;
+    transition: 2s;
+}
+.menu_icon{
+    height: 22px;
+    width: 20px; 
+    /* margin: 5px 0px 0px 1260px; */
+    cursor: pointer;
+    padding: 15px;
+}
+.menu_icon:hover{
+    transition: 0.7s;
+    background-color: rgb(98, 122, 56);
+}
+.hmf_logo{
+    font-family:'Segoe UI',Arial,sans-serif;
+    padding: 15px 15px 15px 90px;
+}
+p{
+    font-size: 20px;
+}
+.intro{
+    background-color: rgb(47, 100, 47);
+    color: white;
+    height: 150px;
+    padding: 70px 200px 00px 200px;
+    
+}
+.explanation_heads{
+    font-size: 70px;
+    padding: 30px 0px 30px 200px;
+}
+.explanations{
+    padding: 10px 200px 30px 200px;
+    
+}
+hr{
+    margin: 0px 200px 0px 200px;
+}
+
+footer{
+    background-color: #ffff;
+    height: 400px;
+
+}
+.outro_heading{
+    margin: 0px 0px 0px 90px;
+    padding-top: 100px;
+    font-size: 50px;
+}
+.outro{
+    /* border: 2px solid black; */
+    display: flex;
+   
+    
+}
+.outro_content{
+    /* border: 2px solid red; */
+    width: 50%;
+    padding-left: 90px;
+}
+img.instagram{
+    height: 50px;
+    width: 50px;
+    margin:30px 0px 50px 0px;
+}
+img.facebook{
+    height: 50px;
+    width: 50px;
+     margin:30px 0px 50px 0px;
+    
+}
+img.linkedin{
+    height: 50px;
+    width: 50px;
+     margin:30px 0px 50px 0px;
+    
+}
+a{
+    color: rgb(47, 100, 47);
+}
+.pamorg{
+    height: 45px;
+    width: 200px;
+    /* border: 2px solid black; */
+    margin-left: -20px;
+    margin-top: 85px;
+}
+.to_top{
+    height: 50px;
+    width: 50px; 
+    position:fixed;
+    top: 530px;
+    right: 30px;
+}
+
+
+/* 
+===================responsiveness====================================== */
+
+
+@media only screen and (max-width:1265px) {
+nav ul{
+    font-size: 35px;
+    transition: 2S;
+    
+}
+.intro{
+    padding: 50px 70px 20px 70px; 
+    transition: 2s;
+}
+
+.explanation_heads{
+    font-size: 50px;
+    padding: 30px 0px 30px 70px;
+    transition: 2S;
+}
+.explanations{
+    padding: 10px 70px 30px 70px;
+    transition: 2s;
+    
+}
+
+
+
+}
+
+
+
+@media only screen and (max-width:700px){
+nav ul{
+    font-size: 30px;
+    transition: 2S;
+    
+}
+.hmf_logo{
+
+    padding: 15px 15px 15px 30px;
+    transition: 2s;
+}
+p{
+    font-size: 16px;
+    transition: 2s;
+}
+.intro{
+    padding: 50px 10px 20px 10px; 
+    transition: 2s;
+}
+
+.explanation_heads{
+    font-size: 30px;
+    padding: 30px 0px 30px 10px;
+    transition: 2S;
+}
+.explanations{
+    padding: 10px 10px 30px 10px;
+    transition: 2s;
+    
+}
+.outro_heading{
+    margin: 150px 0px 70px 10px;
+    font-size: 30px;
+    transition: 2s;
+}
+.outro{
+    /* border: 2px solid black; */
+    display: flex;
+    margin-bottom: 60px;
+    transition: 2s;
+    
+    
+}
+.outro_content{
+    /* border: 2px solid red; */
+    width: 50%;
+    padding-left: 10px;
+    padding-right: 10px;
+    transition: 2s;
+    
+}
+img.instagram{
+    height: 40px;
+    width: 40px;
+    margin:30px 0px 50px 0px;
+    transition: 2s;
+}
+img.facebook{
+    height: 40px;
+    width: 40px;
+    margin:30px 0px 50px 0px;
+    transition: 2s;
+    
+}
+img.linkedin{
+    height: 40px;
+    width: 40px;
+    margin:30px 0px 50px 0px;
+    transition: 2s;
+    
+}
+
+.pamorg{
+    height: 25px;
+    width: 100px;
+    /* border: 2px solid black; */
+    margin-left: -10px;
+    margin-top: 85px;
+    transition: 2s;
+}
+.to_top{
+    height: 40px;
+    width: 40px; 
+    position:fixed;
+    top: 800px;
+    right: 30px;
+    transition: 2s;
+}
+footer{
+    background-color: #ffff;
+    height: 400px;
+}
+
+
+
+
+
+}

@@ -1,0 +1,403 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HMF | Shop</title>
+    <link rel="stylesheet" href="Shop.css">
+</head>
+<body>
+    <div class="body_content">
+            <div class="navbar">
+                    <h4 class="hmf_logo">HMF</h4>
+                    <nav id="to_top">   
+                    <ul id="menu_list">
+                            <li><a href="index.html">Home</a></li>
+                            <li><a href="Shop.html">Shop</a></li>
+                            <li><a href="Herb Archive.html">Archive</a></li>
+                            <li><a href="About.html">About</a></li>
+                            <li><a href="Contact.html">Contact</a></li>
+                    </ul> 
+                    </nav>
+                    <img src="./Nav.png" alt="meni_icon" class="menu_icon"  onclick="togglemenu()">
+                </div>
+    </div>
+
+
+
+<!-- HEADER -->
+ <div>
+  <button class="cart-btn" onclick="openCart()">
+    🛒 Cart <span class="cart-count" id="cartCount">0</span>
+  </button>
+  </div>
+
+
+<!-- SEARCH & FILTER -->
+<div class="controls">
+  <div class="search-wrap">
+    <span class="s-icon">🔍</span>
+    <input type="text" id="searchInput" placeholder="Search herbs, conditions..." oninput="filterProducts()"/>
+  </div>
+  <div class="filters" id="filterBtns"></div>
+</div>
+
+<!-- RESULTS COUNT -->
+<div class="results-bar" id="resultsBar"></div>
+
+<!-- PRODUCT GRID -->
+<div class="shop-grid" id="shopGrid"></div>
+
+<!-- CART OVERLAY -->
+<div class="cart-overlay" id="cartOverlay" onclick="closeCart()"></div>
+
+<!-- CART SIDEBAR -->
+<div class="cart-sidebar" id="cartSidebar">
+  <div class="cart-header">
+    <h2>🛒 Your Cart</h2>
+    <button class="close-cart" onclick="closeCart()">✕</button>
+  </div>
+  <div class="cart-items" id="cartItems"></div>
+  <div class="cart-footer">
+    <div class="cart-total">
+      <span>Total</span>
+      <span id="cartTotal">₦0.00</span>
+    </div>
+    <button class="checkout-btn" onclick="openCheckout()">Proceed to Checkout →</button>
+  </div>
+</div>
+
+<!-- CHECKOUT MODAL -->
+<div class="modal-overlay" id="modalOverlay">
+  <div class="modal">
+    <div class="modal-head">
+      <h2>🌿 Place Your Order</h2>
+      <button class="close-modal" onclick="closeCheckout()">✕</button>
+    </div>
+    <div class="modal-body">
+      <!-- Order Form -->
+      <div id="checkoutForm">
+        <div class="order-summary" id="orderSummary"></div>
+        <div class="form-row">
+          <div class="form-group">
+            <label>First Name</label>
+            <input type="text" id="fname" placeholder="Paul"/>
+          </div>
+          <div class="form-group">
+            <label>Last Name</label>
+            <input type="text" id="lname" placeholder="Smith"/>
+          </div>
+        </div>
+        <div class="form-group">
+          <label>Email Address</label>
+          <input type="email" id="email" placeholder="paul@example.com"/>
+        </div>
+        <div class="form-group">
+          <label>Phone Number</label>
+          <input type="tel" id="phone" placeholder="+234 800 000 0000"/>
+        </div>
+        <div class="form-group">
+          <label>Delivery Address</label>
+          <textarea id="address" rows="2" placeholder="House No, Street, City, State" style="resize: vertical;"></textarea>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label>State</label>
+            <select id="state">
+              <option value="">Select State</option>
+              <option>Abuja (FCT)</option><option>Abia</option><option>Adamawa</option>
+              <option>Akwa Ibom</option><option>Anambra</option><option>Bauchi</option>
+              <option>Bayelsa</option><option>Benue</option><option>Borno</option>
+              <option>Cross River</option><option>Delta</option><option>Ebonyi</option>
+              <option>Edo</option><option>Ekiti</option><option>Enugu</option>
+              <option>Gombe</option><option>Imo</option><option>Jigawa</option>
+              <option>Kaduna</option><option>Kano</option><option>Katsina</option>
+              <option>Kebbi</option><option>Kogi</option><option>Kwara</option>
+              <option>Lagos</option><option>Nasarawa</option><option>Niger</option>
+              <option>Ogun</option><option>Ondo</option><option>Osun</option>
+              <option>Oyo</option><option>Plateau</option><option>Rivers</option>
+              <option>Sokoto</option><option>Taraba</option><option>Yobe</option><option>Zamfara</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Payment Method</label>
+            <select id="payment">
+              <option>Bank Transfer</option>
+              <option>Pay on Delivery</option>
+              <option>Card Payment</option>
+            </select>
+          </div>
+        </div>
+        <button class="place-order-btn" onclick="placeOrder()">🌿 Place Order</button>
+      </div>
+      <!-- Success -->
+      <div class="success-screen" id="successScreen">
+        <div class="success-icon">✅</div>
+        <h2>Order Placed!</h2>
+        <p>Thank you! Your medicinal herbs are on the way.<br/>You'll receive a confirmation shortly.</p>
+        <button class="continue-btn" onclick="resetOrder()">Continue Shopping</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+<!-- TOAST -->
+<div class="toast" id="toast"></div>
+
+<script>
+const PRODUCTS = [
+  // IMMUNITY
+  { id:1,  name:"Moringa Leaf Powder",   emoji:"🌿", category:"Immunity",     price:3500,  desc:"Rich in vitamins & antioxidants. Boosts immunity and reduces inflammation.", badge:"Bestseller" },
+  { id:2,  name:"Echinacea Capsules",    emoji:"🌸", category:"Immunity",     price:4200,  desc:"Fights colds & infections. Stimulates white blood cell production.", badge:null },
+  { id:3,  name:"Elderberry Syrup",      emoji:"💜", category:"Immunity",     price:5500,  desc:"Powerful antiviral properties. Reduces flu duration and severity.", badge:"Popular" },
+  { id:4,  name:"Astragalus Root",       emoji:"🌱", category:"Immunity",     price:3800,  desc:"Adaptogenic herb that strengthens the immune system over time.", badge:null },
+  // DIGESTION
+  { id:5,  name:"Ginger Root Extract",   emoji:"🌱", category:"Digestion",    price:2800,  desc:"Relieves nausea, bloating, and indigestion. Anti-inflammatory.", badge:"Bestseller" },
+  { id:6,  name:"Peppermint Leaves",     emoji:"🍃", category:"Digestion",    price:1800,  desc:"Soothes IBS, reduces stomach spasms, and freshens breath.", badge:null },
+  { id:7,  name:"Aloe Vera Gel",         emoji:"🌵", category:"Digestion",    price:3200,  desc:"Heals the gut lining, reduces acid reflux, and aids detox.", badge:null },
+  { id:8,  name:"Fennel Seed Tea",       emoji:"🌾", category:"Digestion",    price:2200,  desc:"Reduces bloating, gas, and cramping. Gentle digestive tonic.", badge:null },
+  // STRESS & SLEEP
+  { id:9,  name:"Ashwagandha Powder",    emoji:"🍂", category:"Stress & Sleep", price:4800, desc:"Adaptogen that lowers cortisol, reduces anxiety, and improves sleep.", badge:"Popular" },
+  { id:10, name:"Valerian Root",         emoji:"🌼", category:"Stress & Sleep", price:4000, desc:"Natural sedative. Promotes deep, restful sleep without grogginess.", badge:null },
+  { id:11, name:"Lavender Oil (Herb)",   emoji:"💜", category:"Stress & Sleep", price:5200, desc:"Calms the nervous system and relieves tension headaches.", badge:null },
+  { id:12, name:"Passionflower Herb",    emoji:"🌺", category:"Stress & Sleep", price:3600, desc:"Relieves anxiety, insomnia, and nervous restlessness naturally.", badge:null },
+  // PAIN RELIEF
+  { id:13, name:"Turmeric + Black Pepper", emoji:"🟡", category:"Pain Relief",  price:3100, desc:"Powerful anti-inflammatory for joint pain, arthritis, and muscle aches.", badge:"Bestseller" },
+  { id:14, name:"Willow Bark Extract",   emoji:"🌳", category:"Pain Relief",   price:4500, desc:"Nature's aspirin. Relieves headaches, back pain, and fever.", badge:null },
+  { id:15, name:"Clove Oil Capsules",    emoji:"🌰", category:"Pain Relief",   price:2900, desc:"Potent analgesic for toothache, joint pain, and nerve pain.", badge:null },
+  { id:16, name:"Devil's Claw Root",     emoji:"🌿", category:"Pain Relief",   price:5100, desc:"Anti-inflammatory for arthritis, lower back pain, and osteoarthritis.", badge:null },
+  // BLOOD SUGAR
+  { id:17, name:"Bitter Leaf Extract",  emoji:"🍀", category:"Blood Sugar",   price:2600, desc:"Lowers blood glucose and supports liver & kidney health.", badge:"Popular" },
+  { id:18, name:"Gymnema Sylvestre",    emoji:"🌱", category:"Blood Sugar",   price:4700, desc:"Reduces sugar cravings and supports healthy insulin function.", badge:null },
+  { id:19, name:"Cinnamon Bark Powder", emoji:"🟤", category:"Blood Sugar",   price:2100, desc:"Improves insulin sensitivity and lowers fasting blood sugar.", badge:null },
+  { id:20, name:"Fenugreek Seeds",      emoji:"🌾", category:"Blood Sugar",   price:1900, desc:"High in soluble fiber. Slows sugar absorption and reduces HbA1c.", badge:null },
+  // RESPIRATORY
+  { id:21, name:"Eucalyptus Leaf Tea",  emoji:"🍃", category:"Respiratory",   price:2400, desc:"Opens airways, relieves congestion, and fights respiratory infections.", badge:null },
+  { id:22, name:"Thyme & Honey Syrup",  emoji:"🍯", category:"Respiratory",   price:3900, desc:"Natural expectorant for coughs, bronchitis, and chest tightness.", badge:"Popular" },
+  { id:23, name:"Mullein Leaf",         emoji:"🌿", category:"Respiratory",   price:3300, desc:"Soothes irritated lung tissue and clears mucus buildup.", badge:null },
+  { id:24, name:"Licorice Root",        emoji:"🌱", category:"Respiratory",   price:3700, desc:"Anti-inflammatory for throat, lungs, and upper respiratory tract.", badge:null },
+  // SKIN & DETOX
+  { id:25, name:"Neem Leaf Powder",     emoji:"🌿", category:"Skin & Detox",  price:2300, desc:"Antibacterial herb for acne, eczema, and skin purification.", badge:null },
+  { id:26, name:"Dandelion Root Tea",   emoji:"🌻", category:"Skin & Detox",  price:2700, desc:"Detoxifies liver, purifies blood, and clears skin conditions.", badge:null },
+  { id:27, name:"Burdock Root",         emoji:"🌱", category:"Skin & Detox",  price:3400, desc:"Deep blood cleanser. Treats acne, psoriasis, and eczema.", badge:"Popular" },
+  { id:28, name:"Milk Thistle Seeds",   emoji:"🌸", category:"Skin & Detox",  price:4100, desc:"Protects liver cells, aids detoxification, and improves skin clarity.", badge:null },
+  // HEART HEALTH
+  { id:29, name:"Hawthorn Berry",       emoji:"❤️", category:"Heart Health",  price:4600, desc:"Strengthens heart muscle, lowers blood pressure, improves circulation.", badge:null },
+  { id:30, name:"Garlic Extract Caps",  emoji:"🧄", category:"Heart Health",  price:3000, desc:"Lowers cholesterol & blood pressure. Powerful cardiovascular protector.", badge:"Bestseller" },
+];
+
+const CATEGORIES = ["All", ...new Set(PRODUCTS.map(p => p.category))];
+let cart = {};
+let activeFilter = "All";
+
+// ── CATEGORY COLORS ──
+const catColors = {
+  "Immunity":     "#e8f5e9",
+  "Digestion":    "#fff3e0",
+  "Stress & Sleep":"#f3e5f5",
+  "Pain Relief":  "#fce4ec",
+  "Blood Sugar":  "#e0f7fa",
+  "Respiratory":  "#e8eaf6",
+  "Skin & Detox": "#f9fbe7",
+  "Heart Health": "#ffebee",
+};
+
+// ── BUILD FILTER BUTTONS ──
+function buildFilters() {
+  const wrap = document.getElementById("filterBtns");
+  CATEGORIES.forEach(cat => {
+    const btn = document.createElement("button");
+    btn.className = "filter-btn" + (cat === "All" ? " active" : "");
+    btn.textContent = cat === "All" ? "🌿 All" : cat;
+    btn.onclick = () => {
+      activeFilter = cat;
+      document.querySelectorAll(".filter-btn").forEach(b => b.classList.remove("active"));
+      btn.classList.add("active");
+      filterProducts();
+    };
+    wrap.appendChild(btn);
+  });
+}
+
+// ── RENDER PRODUCTS ──
+function filterProducts() {
+  const q = document.getElementById("searchInput").value.toLowerCase();
+  const filtered = PRODUCTS.filter(p => {
+    const matchCat = activeFilter === "All" || p.category === activeFilter;
+    const matchQ = !q || p.name.toLowerCase().includes(q) || p.desc.toLowerCase().includes(q) || p.category.toLowerCase().includes(q);
+    return matchCat && matchQ;
+  });
+  renderProducts(filtered);
+  document.getElementById("resultsBar").textContent =
+    `Showing ${filtered.length} of ${PRODUCTS.length} products`;
+}
+
+function renderProducts(list) {
+  const grid = document.getElementById("shopGrid");
+  grid.innerHTML = "";
+  if (!list.length) {
+    grid.innerHTML = `<div class="no-results"><div class="icon">🌿</div><p>No herbs found. Try a different search or category.</p></div>`;
+    return;
+  }
+  list.forEach((p, i) => {
+    const inCart = cart[p.id]?.qty > 0;
+    const bgColor = catColors[p.category] || "#f5f5f5";
+    const card = document.createElement("div");
+    card.className = "product-card";
+    card.style.animationDelay = `${i * 0.04}s`;
+    card.innerHTML = `
+      <div class="card-img" style="background:${bgColor}">
+        <span>${p.emoji}</span>
+        ${p.badge ? `<span class="card-badge">${p.badge}</span>` : ""}
+      </div>
+      <div class="card-body">
+        <div class="card-category">${p.category}</div>
+        <div class="card-name">${p.name}</div>
+        <div class="card-desc">${p.desc}</div>
+        <div class="card-footer">
+          <span class="card-price">₦${p.price.toLocaleString()}</span>
+          <button class="add-btn ${inCart ? 'added' : ''}" id="btn-${p.id}" onclick="addToCart(${p.id})">
+            ${inCart ? `✓ In Cart` : `+ Add`}
+          </button>
+        </div>
+      </div>`;
+    grid.appendChild(card);
+  });
+}
+
+// ── CART ──
+function addToCart(id) {
+  const p = PRODUCTS.find(x => x.id === id);
+  if (!cart[id]) cart[id] = { ...p, qty: 0 };
+  cart[id].qty++;
+  updateCartUI();
+  const btn = document.getElementById(`btn-${id}`);
+  if (btn) { btn.classList.add("added"); btn.textContent = "✓ In Cart"; }
+  showToast(`${p.emoji} ${p.name} added to cart!`);
+}
+
+function changeQty(id, delta) {
+  if (!cart[id]) return;
+  cart[id].qty += delta;
+  if (cart[id].qty <= 0) delete cart[id];
+  updateCartUI();
+  renderCartItems();
+  filterProducts();
+}
+
+function removeFromCart(id) {
+  delete cart[id];
+  updateCartUI();
+  renderCartItems();
+  filterProducts();
+}
+
+function updateCartUI() {
+  const total = Object.values(cart).reduce((s, i) => s + i.qty, 0);
+  document.getElementById("cartCount").textContent = total;
+}
+
+function renderCartItems() {
+  const wrap = document.getElementById("cartItems");
+  const items = Object.values(cart);
+  if (!items.length) {
+    wrap.innerHTML = `<div class="cart-empty">🌿<br/>Your cart is empty.<br/>Add some herbs to get started!</div>`;
+    document.getElementById("cartTotal").textContent = "₦0.00";
+    return;
+  }
+  wrap.innerHTML = items.map(item => `
+    <div class="cart-item">
+      <span class="ci-emoji">${item.emoji}</span>
+      <div class="ci-info">
+        <div class="ci-name">${item.name}</div>
+        <div class="ci-price">₦${(item.price * item.qty).toLocaleString()}</div>
+      </div>
+      <div class="ci-controls">
+        <button class="qty-btn" onclick="changeQty(${item.id}, -1)">−</button>
+        <span class="qty-num">${item.qty}</span>
+        <button class="qty-btn" onclick="changeQty(${item.id}, 1)">+</button>
+        <button class="remove-item" onclick="removeFromCart(${item.id})">🗑</button>
+      </div>
+    </div>`).join("");
+  const total = items.reduce((s, i) => s + i.price * i.qty, 0);
+  document.getElementById("cartTotal").textContent = `₦${total.toLocaleString()}`;
+}
+
+function openCart() {
+  renderCartItems();
+  document.getElementById("cartOverlay").classList.add("open");
+  document.getElementById("cartSidebar").classList.add("open");
+}
+function closeCart() {
+  document.getElementById("cartOverlay").classList.remove("open");
+  document.getElementById("cartSidebar").classList.remove("open");
+}
+
+// ── CHECKOUT ──
+function openCheckout() {
+  const items = Object.values(cart);
+  if (!items.length) { showToast("Your cart is empty!"); return; }
+  closeCart();
+  const total = items.reduce((s, i) => s + i.price * i.qty, 0);
+  const rows = items.map(i =>
+    `<div class="order-row"><span>${i.emoji} ${i.name} ×${i.qty}</span><span>₦${(i.price*i.qty).toLocaleString()}</span></div>`
+  ).join("");
+  document.getElementById("orderSummary").innerHTML =
+    `<h3>Order Summary</h3>${rows}
+     <div class="order-row"><span>Total</span><span>₦${total.toLocaleString()}</span></div>`;
+  document.getElementById("checkoutForm").style.display = "block";
+  document.getElementById("successScreen").classList.remove("show");
+  document.getElementById("modalOverlay").classList.add("open");
+}
+function closeCheckout() {
+  document.getElementById("modalOverlay").classList.remove("open");
+}
+
+function placeOrder() {
+  const fname = document.getElementById("fname").value.trim();
+  const lname = document.getElementById("lname").value.trim();
+  const email = document.getElementById("email").value.trim();
+  const phone = document.getElementById("phone").value.trim();
+  const address = document.getElementById("address").value.trim();
+  const state = document.getElementById("state").value;
+  if (!fname || !lname || !email || !phone || !address || !state) {
+    showToast("⚠️ Please fill all fields."); return;
+  }
+  document.getElementById("checkoutForm").style.display = "none";
+  document.getElementById("successScreen").classList.add("show");
+}
+
+function resetOrder() {
+  cart = {};
+  updateCartUI();
+  closeCheckout();
+  filterProducts();
+}
+
+// ── TOAST ──
+function showToast(msg) {
+  const t = document.getElementById("toast");
+  t.textContent = msg;
+  t.classList.add("show");
+  setTimeout(() => t.classList.remove("show"), 2800);
+}
+
+// ── INIT ──
+buildFilters();
+filterProducts();
+
+        //------------------ toggle_nav --------------
+ var menu_list = document.getElementById("menu_list")
+    menu_list.style.maxHeight = "0px";
+    function togglemenu() {
+        if (menu_list.style.maxHeight == "0px") {
+            menu_list.style.maxHeight = "100%"
+        } else {
+            menu_list.style.maxHeight = "0"
+        }
+    }
+    </script>
+</body>
+</html>
